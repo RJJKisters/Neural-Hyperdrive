@@ -1,8 +1,7 @@
-# hyperdrive.py — FINAL WORKING VERSION (20 Nov 2025)
+# hyperdrive.py — WORKING VERSION 20 Nov 2025
 import os
 import openai
 
-# Correct xAI endpoint + current model
 openai.base_url = "https://api.x.ai/v1"
 openai.api_key = os.getenv("GROK_API_KEY")
 
@@ -12,7 +11,8 @@ class NeuralHyperdrive:
 
     def _call_grok(self, prompt: str) -> str:
         response = openai.chat.completions.create(
-            model="grok-4",            # ← this is the correct model right now
+            model="grok-4-0709",   # ← this model works 100 % right now
+            # model="grok-4-1-fast-reasoning",  # uncomment this line tomorrow when it's fully rolled out
             messages=[{"role": "system", "content": prompt}],
             temperature=0.85,
             max_tokens=4000
