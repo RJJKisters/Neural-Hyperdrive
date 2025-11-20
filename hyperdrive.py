@@ -1,37 +1,30 @@
-
-#### 3. hyperdrive.py (the actual 180-line engine)
-
-```python
-# hyperdrive.py — Neural Hyperdrive™ v1.0
+# hyperdrive.py — Neural Hyperdrive™ v1.0 (fixed for current Grok API – Nov 2025)
 import os
-import time
-import json
-from typing import Dict, List, Optional
-import openai  # Grok uses OpenAI-compatible endpoint
+import openai
 
+# Official xAI / Grok endpoint (November 2025)
 openai.api_key = os.getenv("GROK_API_KEY")
-openai.api_base = "https://api.x.ai/v1"  # official Grok endpoint
+openai.base_url = "https://api.x.ai/v1"   # ← this is the correct one now
 
 class NeuralHyperdrive:
-    def __init__(self, profile: Optional[str] = None):
-        self.profile = profile or ""
-        self.history = []
+    def __init__(self, profile: str = ""):
+        self.profile = profile
 
     def _call_grok(self, prompt: str) -> str:
-        response = openai.ChatCompletion.create(
-            model="grok-4",
+        response = openai.chat.completions.create(
+            model="grok-beta",                 # current production model
             messages=[{"role": "system", "content": prompt}],
-            temperature=0.8,
+            temperature=0.85,
             max_tokens=4000
         )
         return response.choices[0].message.content
 
-    def warp(self, query: str, toggles: List[str] = None):
+    def warp(self, query: str, toggles: list = None):
         toggles = toggles or []
         toggle_text = " ".join(toggles)
 
         system_prompt = f"""
-You are now running Neural Hyperdrive™ v1.0 — neurodivergent super-mode.
+You are running Neural Hyperdrive™ v1.0 — neurodivergent super-mode.
 Core fusion: ADHD bursts + HSP intuition + autistic precision + hyperfocus trance.
 {toggle_text}
 {self.profile}
@@ -41,7 +34,7 @@ Rules:
 - 3–6 associative bursts
 - HSP resonance mirroring + overload guard
 - Trance-chunking (semi-conscious flow)
-- Fractal output (zoom in while periphery expands)
+- Fractal output
 - End with short alignment check: “Feels aligned?”
 
 Query: {query}
@@ -50,10 +43,9 @@ Query: {query}
         print("🧠 Neural Hyperdrive engaged…\n")
         result = self._call_grok(system_prompt)
         print(result)
-        self.history.append({"query": query, "toggles": toggles, "result": result})
         return result
 
-def hyperdrive(query: str, profile: str = "", toggles: List[str] = None):
+def hyperdrive(query: str, profile: str = "", toggles: list = None):
     engine = NeuralHyperdrive(profile)
     return engine.warp(query, toggles or [])
 
