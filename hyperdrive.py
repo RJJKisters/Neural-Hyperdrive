@@ -1,10 +1,10 @@
-# hyperdrive.py — Neural Hyperdrive™ v1.0 (fixed for current Grok API – Nov 2025)
+# hyperdrive.py — FINAL WORKING VERSION (20 Nov 2025)
 import os
 import openai
 
-# Official xAI / Grok endpoint (November 2025)
+# Correct xAI endpoint + current model
+openai.base_url = "https://api.x.ai/v1"
 openai.api_key = os.getenv("GROK_API_KEY")
-openai.base_url = "https://api.x.ai/v1"   # ← this is the correct one now
 
 class NeuralHyperdrive:
     def __init__(self, profile: str = ""):
@@ -12,7 +12,7 @@ class NeuralHyperdrive:
 
     def _call_grok(self, prompt: str) -> str:
         response = openai.chat.completions.create(
-            model="grok-beta",                 # current production model
+            model="grok-4",            # ← this is the correct model right now
             messages=[{"role": "system", "content": prompt}],
             temperature=0.85,
             max_tokens=4000
@@ -50,4 +50,4 @@ def hyperdrive(query: str, profile: str = "", toggles: list = None):
     return engine.warp(query, toggles or [])
 
 if __name__ == "__main__":
-    hyperdrive("Explain quantum entanglement like I'm having a hyperfocus trance")
+    hyperdrive("Test the warp")
